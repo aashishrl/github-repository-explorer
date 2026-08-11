@@ -1,75 +1,119 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import {useState} from 'react';
 
-export default function Dashboard() {
-  const { data, isPending, error } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
-  });
+type Employees = {
+  id: number;
+  employeeName: string;
+  job: string;
+}
 
-    const [search, setSearch] = useState("");
+const employees:Employees[] = [
+  {
+    id: 1,
+    employeeName: "Jenny Wilson",
+    job: "Software Engineer",
+  },
+  {
+    id: 2,
+    employeeName: "Ronald Richards",
+    job: "Product Manager",
+  },
+  {
+    id: 3,
+    employeeName: "Darrell Steward",
+    job: "UI/UX Designer",
+  },
+  {
+    id: 4,
+    employeeName: "Courtney Henry",
+    job: "QA Engineer",
+  },
+  {
+    id: 5,
+    employeeName: "Cameron Williamson",
+    job: "Software Engineer",
+  },
+  {
+    id: 6,
+    employeeName: "Brooklyn Simmons",
+    job: "Product Manager",
+  },
+  {
+    id: 7,
+    employeeName: "Darlene Robertson",
+    job: "UI/UX Designer",
+  },
+  {
+    id: 8,
+    employeeName: "Wade Warren",
+    job: "QA Engineer",
+  },
+  {
+    id: 9,
+    employeeName: "Esther Howard",
+    job: "Software Engineer",
+  },
+  {
+    id: 10,
+    employeeName: "Kristin Watson",
+    job: "Product Manager",
+  },
+  {
+    id: 11,
+    employeeName: "Guy Hawkins",
+    job: "UI/UX Designer",
+  },
+  {
+    id: 12,
+    employeeName: "Savannah Nguyen",
+    job: "QA Engineer",
+  },
+];
 
-  const users = [
-    { id: 1, name: "John Doe", email: "john@example.com" },
-    { id: 2, name: "Sarah Smith", email: "sarah@example.com" },
-    { id: 3, name: "Mike Johnson", email: "mike@example.com" },
-    { id: 4, name: "David Brown", email: "david@example.com" },
-  ];
+export default function Dashboard () {
+  
+  // const [filteredData, setFilteredData] = useState(employees);
+  const [search, setSearch] = useState("");
 
-  const results = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredDate = employees.filter(employee=>{
+    const query = search.toLocaleLowerCase();
+    if(search.trim()==="") return employee;
+    return(
+      employee.employeeName.toLocaleLowerCase().includes(query)
+    )
+  })
 
+  const handleSoftClick = filteredDate.filter(data=>{
+    console.log("software button clicked")
+    return data.job==="Software Engineer";
+  })
+  
   return (
-    <section className="min-h-screen bg-gray-100 px-6 py-10">
-      <div className="mx-auto max-w-2xl">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Search Users
-          </h1>
-          <p className="mt-1 text-gray-500">
-            Find a user by their name.
-          </p>
-        </div>
+    <div className="px-12 py-6">
+      <div className="flex justify-between">
+        <input 
+          type="text" className="p-2 px-3 border" placeholder="search employee name"
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
+        />
 
-        {/* Search */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          />
-        </div>
-
-        {/* Results */}
-        <div className="space-y-3">
-          {results.length > 0 ? (
-            results.map((user) => (
-              <div
-                key={user.id}
-                className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md"
-              >
-                <h3 className="font-semibold text-gray-900">
-                  {user.name}
-                </h3>
-
-                <p className="mt-1 text-sm text-gray-500">
-                  {user.email}
-                </p>
-              </div>
-            ))
-          ) : (
-            <div className="rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center">
-              <p className="text-gray-500">
-                No users found.
-              </p>
-            </div>
-          )}
+        <div className="flex gap-2">
+          <button>All</button>
+          <button onClick={handleSoftClick}>Software Engineer</button>
+          <button>UI/UX Designer</button>
+          <button>QA Engineer</button>
+          <button>Product Manager</button>
         </div>
       </div>
-    </section>
-  );
+        <br />
+        <hr />
+        <br />
+      <div className="space-y-2">
+        {filteredDate.map(employee=>(
+          <p key={employee.id} className="w-fit bg-amber-200 p-2 px-6 rounded-md border-l-4 border-l-amber-500">
+            {employee.employeeName}
+          </p>
+        ))}
+      </div>
+    </div>
+  )
 }
